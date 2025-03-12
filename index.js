@@ -78,7 +78,8 @@ app.get('/addWatermark', async ({ query }, res) => {
   // console.log(query);
 
   try {
-    const { time, text, url, direction, tenantKey, origin_name = 'old_version_shortcut.png' } = query
+    const { time, text, url, direction, tenantKey, origin_name = 'old_version_shortcut.png', opacity = 16 } = query
+    opacity /= 100;
     const dayjsObj = dayjs(new Date(Number(time)))
     const showDate = Boolean(time != '@NULL@')
     const date = dayjsObj.format('YYYY-MM-DD')
@@ -118,7 +119,7 @@ app.get('/addWatermark', async ({ query }, res) => {
       ctx.rotate(rotate * Math.PI / 180)
       const rotatedWidth = width * Math.cos(rotate * Math.PI / 180) + height * Math.sin(rotate * Math.PI / 180)
       const rotatedHeight = height * Math.cos(rotate * Math.PI / 180) + width * Math.sin(rotate * Math.PI / 180)
-      ctx.fillStyle = 'rgba(88,88,88,0.16)'
+      ctx.fillStyle = `rgba(88,88,88,${opacity})`
       ctx.font = size2 + 'px MiSans'
       for (let y = -Math.sin(rotate * Math.PI / 180) * width; y < rotatedHeight; y += gapY + fontSize) {
         for (let x = (y / rotatedHeight) * ctx.measureText(coverText).width; x < rotatedWidth; x += gapX + ctx.measureText(coverText).width) {
@@ -163,7 +164,7 @@ app.get('/addWatermark', async ({ query }, res) => {
       if (showDate) {  // 显示日期
 
         // 半透明文字背景
-        ctx.fillStyle = 'rgba(0,0,0,0.5)'
+        ctx.fillStyle = `rgba(0,0,0,${opacity})`
         let bgWidth = Math.max(clockWidth + size3 + size4 + size3 + dateWidth + margin + margin, textWidth + margin + margin)
         let bgHeight = size2 + size1 + margin + margin
         const t = globalOffsetMap[direction]
