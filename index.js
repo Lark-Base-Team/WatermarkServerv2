@@ -78,7 +78,7 @@ app.get('/addWatermark', async ({ query }, res) => {
   // console.log(query);
 
   try {
-    const { time, text, url, direction, tenantKey, origin_name = 'old_version_shortcut.png', opacity = 16 } = query
+    let { time, text, url, direction, tenantKey, origin_name = 'old_version_shortcut.png', opacity = 16 } = query
     opacity /= 100;
     const dayjsObj = dayjs(new Date(Number(time)))
     const showDate = Boolean(time != '@NULL@')
